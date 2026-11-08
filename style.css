@@ -54,3 +54,7 @@ header{padding-top:calc(5px + env(safe-area-inset-top));padding-bottom:7px}
 nav{padding:7px 12px calc(7px + env(safe-area-inset-bottom))}
 nav button{padding:10px 12px}
 @media(min-width:650px){.day{height:auto}}
+
+/* V1.3: input file thật đặt trong vùng chạm của label, không dùng display:none trên iOS */
+.filePicker{position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0}
+.importButton{display:inline-flex;align-items:center;justify-content:center;cursor:pointer;min-height:42px;text-align:center}
