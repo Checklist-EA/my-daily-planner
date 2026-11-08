@@ -17,7 +17,7 @@ function forDay(s,g){return state.tasks.filter(t=>displayDate(t)===s&&(g===undef
 function render(){
  $('month').textContent=`Tháng ${view.getMonth()+1}, ${view.getFullYear()}`;
  let first=new Date(view.getFullYear(),view.getMonth(),1),offset=(first.getDay()+6)%7,start=new Date(first);start.setDate(1-offset);
- let total=Math.ceil((offset+new Date(view.getFullYear(),view.getMonth()+1,0).getDate())/7)*7;
+ let total=42; // luôn 6 tuần, tránh nhảy chiều cao khi chuyển tháng
  let html='';
  for(let i=0;i<total;i++){
   let d=new Date(start);d.setDate(start.getDate()+i);
@@ -59,3 +59,35 @@ $('calendar').onclick=e=>{let dot=e.target.closest('button[data-group]');if(dot)
 $('sheetBody').addEventListener('click',e=>{let el=e.target.closest('[data-action]');if(!el)return;let {action,id,day,group}=el.dataset;if(action==='group')groupList(day,Number(group));if(action==='day')dayList(day);if(action==='new')form(null,Number(group),day);if(action==='edit')form(id)});
 $('sheetBody').addEventListener('change',e=>{if(e.target.dataset.action==='check'){let t=state.tasks.find(t=>t.id===e.target.dataset.id);if(t){t.done=e.target.checked;t.doneAt=t.done?new Date().toISOString():null;save();let parent=e.target.closest('.row');parent.querySelector('.grow').style.opacity=t.done?'.65':'1';render()}}});
 $('prev').onclick=()=>{view.setMonth(view.getMonth()-1);render()};$('next').onclick=()=>{view.setMonth(view.getMonth()+1);render()};$('today').onclick=()=>{view=new Date();view.setDate(1);render()};$('add').onclick=()=>form(null,0,selected);$('search').onclick=search;$('settings').onclick=settings;$('pending').onclick=pending;$('close').onclick=close;$('overlay').onclick=e=>{if(e.target===$('overlay'))close()};if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});render();
+
+// V1.2: tính chiều cao vùng lịch theo phần không gian thực tế trên iPhone.
+function fitCalendar(){
+ const cal=$('calendar');if(!cal)return;
+ const top=cal.getBoundingClientRect().top;
+ const nav=document.querySelector('nav');
+ const bottom=nav?nav.getBoundingClientRect().top:window.innerHeight;
+ const available=Math.floor(bottom-top-3);
+ cal.style.setProperty('--calendar-height',Math.max(330,available)+'px');
+}
+window.addEventListener('resize',fitCalendar);
+window.addEventListener('orientationchange',()=>setTimeout(fitCalendar,150));
+requestAnimationFrame(fitCalendar);
+// Chỉ nhận vuốt bắt đầu trong lịch; vuốt dọc vẫn cuộn bình thường.
+let swipeStart=null,ignoreClickUntil=0;
+const calEl=$('calendar');
+calEl.addEventListener('touchstart',e=>{
+ if(e.touches.length!==1){swipeStart=null;return}
+ const t=e.touches[0];swipeStart={x:t.clientX,y:t.clientY};
+},{passive:true});
+calEl.addEventListener('touchend',e=>{
+ if(!swipeStart||e.changedTouches.length!==1)return;
+ const t=e.changedTouches[0],dx=t.clientX-swipeStart.x,dy=t.clientY-swipeStart.y;
+ swipeStart=null;
+ if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4){
+  ignoreClickUntil=Date.now()+400;
+  view.setDate(1);view.setMonth(view.getMonth()+(dx<0?1:-1));
+  render();requestAnimationFrame(fitCalendar);
+ }
+},{passive:true});
+calEl.addEventListener('touchcancel',()=>swipeStart=null,{passive:true});
+calEl.addEventListener('click',e=>{if(Date.now()<ignoreClickUntil){e.stopImmediatePropagation();e.preventDefault()}},true);

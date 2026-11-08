@@ -36,3 +36,21 @@ nav button,.primary{background:#10366a;color:white;border:0;border-radius:12px;p
 .muted{color:#84909d;font-size:13px}.pill{display:inline-block;border-radius:10px;background:#eef3fa;padding:5px 8px;font-size:12px}.danger{color:#b82d3a}.progress{height:7px;border-radius:8px;background:#e9eef3;overflow:hidden;margin:9px 0}.progress div{height:100%;background:#16a36a}.empty{padding:25px 5px;color:#85909b;text-align:center}.bubble{width:23px;height:23px;border-radius:50%;display:grid;place-items:center;color:white;font-size:11px;font-weight:700;flex-shrink:0}
 @media(max-width:360px){.taskBars{grid-template-rows:repeat(3,19px);gap:2px}.taskBar{height:19px}.tools button{padding:7px 4px}.dateFields{grid-template-columns:1fr}}
 @media(min-width:650px){main{max-width:850px;margin:auto}.day{height:115px}.sheet{max-width:600px;border-radius:18px 18px 0 0}}
+
+/* V1.2: lịch 6 hàng vừa một màn hình và vuốt ngang đổi tháng */
+body{padding-bottom:0;min-height:100dvh;overflow-x:hidden}
+header{padding-top:calc(5px + env(safe-area-inset-top));padding-bottom:7px}
+.top button{font-size:27px;padding:0 8px;min-height:34px}
+.tools{margin-top:3px;gap:5px}
+.tools button{padding:6px 5px}
+.weekdays span{padding:6px 0}
+.calendar{height:var(--calendar-height, 65dvh);grid-template-rows:repeat(6,minmax(0,1fr));touch-action:pan-y;overscroll-behavior-x:contain;user-select:none;-webkit-user-select:none}
+.day{height:auto;min-height:0;padding:3px 2px}
+.solar{font-size:clamp(13px,3.7vw,17px)}
+.lunar{font-size:clamp(9px,2.4vw,11px)}
+.taskBars{grid-template-rows:repeat(3,minmax(0,1fr));gap:2px;margin-top:3px;height:min(67px,calc(100% - 24px))}
+.taskBar{height:100%;min-height:0;font-size:11px}
+.hint{display:none}
+nav{padding:7px 12px calc(7px + env(safe-area-inset-bottom))}
+nav button{padding:10px 12px}
+@media(min-width:650px){.day{height:auto}}
