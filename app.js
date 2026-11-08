@@ -1,9 +1,9 @@
 'use strict';
 const KEY='daily_planner_v1';const palette=['#1476d4','#15a46a','#e88b2c'];
 const defaults={groups:['Cá nhân','Công việc','Gia đình'],tasks:[]};
-let state=load(),view=new Date(),selected=iso(new Date());view.setDate(1);
 const $=id=>document.getElementById(id);const pad=n=>String(n).padStart(2,'0');
 function iso(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+let state=load(),view=new Date(),selected=iso(new Date());view.setDate(1);
 function dateOf(s){let [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
 function fmt(s){return dateOf(s).toLocaleDateString('vi-VN')}
 function load(){try{let v=JSON.parse(localStorage.getItem(KEY));if(v&&Array.isArray(v.groups)&&Array.isArray(v.tasks))return {groups:[...defaults.groups.map((x,i)=>String(v.groups[i]||x))],tasks:v.tasks.filter(t=>t&&typeof t.id==='string'&&typeof t.title==='string'&&/^\d{4}-\d\d-\d\d$/.test(t.start)&&Number.isInteger(t.group)&&t.group>=0&&t.group<3)}}catch(e){}return structuredClone(defaults)}
