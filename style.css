@@ -58,3 +58,7 @@ nav button{padding:10px 12px}
 /* V1.3: input file thật đặt trong vùng chạm của label, không dùng display:none trên iOS */
 .filePicker{position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0}
 .importButton{display:inline-flex;align-items:center;justify-content:center;cursor:pointer;min-height:42px;text-align:center}
+/* V1.4 independent planning area */
+.bottomTabs{display:flex;gap:8px;margin-bottom:5px}.bottomTabs button{flex:1;border:0;border-radius:8px;background:#eef2f7;color:#24415d;padding:6px;font-size:13px}.bottomTabs button.active{background:#d9e8fa;font-weight:700}
+nav{padding-top:5px}nav button#add{padding:8px 10px}
+.plansHead{padding:12px 14px}.plansHead h2{margin:5px 0}.planCard{display:block;text-align:left;width:calc(100% - 24px);margin:10px 12px;padding:14px;border:1px solid #d9e2ec;border-radius:13px;background:white;color:#253144}.planCard b,.planCard small{display:block}.planCard small{margin-top:7px;color:#718096}.journal{border-left:3px solid #1476d4;padding:5px 10px;margin:12px 0;background:#f6f9fc}.journal small{color:#788796}.journal p{white-space:pre-wrap}.inlineForm{display:flex;gap:7px;margin:12px 0}.inlineForm input{flex:1;min-width:0;font-size:16px;padding:9px;border:1px solid #cbd4df;border-radius:8px}
